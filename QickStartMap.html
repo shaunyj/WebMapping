@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8' />
+    <title>University of Oregon Mapping</title>
+    <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+      
+     <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v2.2.0/mapbox-gl.js'></script>
+      
+     <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v2.2.0/mapbox-gl.css' rel='stylesheet' />
+    
+
+    <style>
+        body { margin:0; padding:0; }
+        #map { position:absolute; top:0; bottom:0; width:100%; }
+        #title { z-index: 9999; 
+         background-color:lightblue; 
+         opacity: 65%; 
+         text-align: center 
+     }
+
+    </style>
+  </head>
+
+  <body>
+     <div id='map'></div>
+     <div id='title'>
+     		<h1>The Portland Area</h1>
+     		<h2>By: Shauny Jackson</h2>
+     </div>
+    <script> 
+     var popup = new mapboxgl.Popup({ offset: 25 })
+        .setHTML('Hello World. Welcome to Portland!');
+        mapboxgl.accessToken = 'pk.eyJ1Ijoic2hhdW55aiIsImEiOiJjbGc1Zmp0eDMwMnkxM3JtcG9wcDMwaHJkIn0.d8yqWyZWTryzJubfgb7jFA';
+ 
+     var map = new mapboxgl.Map({
+         container: 'map', 
+         style: 'mapbox://styles/shaunyj/clg7ajph1001101sam02asda2', 
+         center: [-122.6784, 45.5152],
+         zoom: 11 
+         });
+     var popup_layer = new mapboxgl.Popup({
+           closeOnClick: true, anchor: 'top-right'
+         })
+         .setLngLat([-122.64, 45.5])
+         .setHTML('<h1>Hi Portland!</h1>')
+         .addTo(map);
+     var popup_layer_voodoo = new mapboxgl.Popup({
+         closeOnClick: true, anchor: 'top-left'
+         })
+         .setLngLat([-122.673308, 45.522675])
+         .setHTML('<a href="https://www.voodoodoughnut.com">Voodoo Donuts</a>')
+         .addTo(map);
+     var marker = new mapboxgl.Marker({color: 'lightblue'})
+         .setLngLat([-122.6784, 45.5152])
+         .setPopup(popup)
+         .addTo(map); 
+     var zoo = new mapboxgl.Marker({color: 'lightgreen'})
+         .setLngLat([-122.7158, 45.5101])
+         .setPopup(popup)
+         .addTo(map); 
+     var popup_layer_zoo = new mapboxgl.Popup({
+         closeOnClick: true, anchor: 'top-left'
+         })
+         .setLngLat([-122.7158, 45.5101])
+         .setHTML('<a href="https://www.oregonzoo.org">Oregon Zoo</a>')
+         .addTo(map);
+        
+        // Add optional advanced "On load" function here
+        
+    </script>
+
+  </body>
+
+</html>
