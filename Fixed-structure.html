@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8' />
+    <title>Fixed Map</title>
+    <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+    <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v2.2.0/mapbox-gl.js'></script>
+      
+    <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v2.2.0/mapbox-gl.css' rel='stylesheet' />
+
+    <style>
+        body { margin:50px; padding:0; }
+        #map1 { position:relative; height:300px; width:50%;}
+        #map2 { position:relative; height:300px; width:50%;}
+        #map3 { position:relative; height:300px; width:50%;}
+        
+        /* 2.5.2 Insert additional CSS code here between the <style> tags */
+
+    </style>
+  </head>
+
+      <body>
+       <h1> Map 1: </h1>
+             <div id='map1'></div>
+       <h1> Map 2:</h1>
+             <div id='map2'></div>
+       <h1> Map 3:</h1>
+             <div id='map3'></div>
+               <hr>
+        <script>
+            /* Insert the JavaScript within the <script> tags, within the body */
+            mapboxgl.accessToken = 'pk.eyJ1Ijoic2hhdW55aiIsImEiOiJjbGc1Zmp0eDMwMnkxM3JtcG9wcDMwaHJkIn0.d8yqWyZWTryzJubfgb7jFA';
+
+            var map = new mapboxgl.Map({
+               container: 'map1', // id of a div on your page, where the map will be inserted
+               style: 'mapbox://styles/mapbox/streets-v11', // the style URL 'mapbox://styles/mapbox/streets-v11' 
+               center: [-122.6788, 45.5212], // starting position [lng, lat] eg. [-122.6788, 45.5212]
+               zoom: 11 // starting zoom 
+             });
+            
+            var map2 = new mapboxgl.Map({
+                 container: 'map2', // id of a div on your page, where the map will be inserted
+                 style: 'mapbox://styles/mapbox/streets-v11', // stylesheet location
+                 center: [-122.6588, 45.1212], // starting position [lng, lat] eg. [-122.6788, 45.5212]
+                 zoom: 11 // starting zoom 
+                 });
+            
+            var map3 = new mapboxgl.Map({
+                 container: 'map3', // id of a div on your page, where the map will be inserted
+                 style: 'mapbox://styles/mapbox/streets-v11', // stylesheet location
+                 center: [-122.4788, 45.5212], // starting position [lng, lat] eg. [-122.6788, 45.5212]
+                 zoom: 11 // starting zoom 
+                 });
+
+            // markers and popups
+             var popup = new mapboxgl.Popup()
+                .setText('This is my first point.');
+
+             var marker = new mapboxgl.Marker({color:'red'})
+              .setLngLat([-122.6788, 45.5212]) // starting position [lng, lat]
+              .setPopup(popup) //add the popup named "popup" to this marker 
+		      .addTo(map); // add it to the map with the ID "map"
+            
+             var popup2 = new mapboxgl.Popup()
+             .setText('This is my second point.');
+
+             var marker2 = new mapboxgl.Marker({color:'blue'})
+               .setLngLat([-122.6588, 45.1212]) // starting position [lng, lat] 
+               .setPopup(popup2) //add the popup to the marker 
+               .addTo(map2); // id it to the map with the ID *map2*
+            
+             var popup3 = new mapboxgl.Popup()
+             .setText('This is my third point.');
+
+             var marker3 = new mapboxgl.Marker({color:'darkblue'})
+               .setLngLat([-122.4788, 45.5212]) // starting position [lng, lat] 
+               .setPopup(popup3) //add the popup to the marker 
+               .addTo(map3); // id it to the map with the ID *map3*
+
+
+
+               // Disable drag and zoom handlers.
+               map.dragPan.disable();
+               map.scrollZoom.disable();
+               map.boxZoom.disable();
+               map.dragRotate.disable();
+               map.keyboard.disable();
+               map.doubleClickZoom.disable();
+               map.touchZoomRotate.disable();
+               map.touchZoomRotate.disableRotation();
+                 map2.dragPan.disable();
+                 map2.scrollZoom.disable();
+                 map2.boxZoom.disable();
+                 map2.dragRotate.disable();
+                 map2.keyboard.disable();
+                 map2.doubleClickZoom.disable();
+                 map2.touchZoomRotate.disable();
+                 map2.touchZoomRotate.disableRotation();
+               map3.dragPan.disable();
+               map3.scrollZoom.disable();
+               map3.boxZoom.disable();
+               map3.dragRotate.disable();
+               map3.keyboard.disable();
+               map3.doubleClickZoom.disable();
+               map3.touchZoomRotate.disable();
+               map3.touchZoomRotate.disableRotation();
+
+
+        </script>
+  </body>
+</html>
