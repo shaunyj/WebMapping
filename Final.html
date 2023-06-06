@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title style=font-family:monospace>DDCA First Place Award Distribution</title>
+
+    <!--    The Mapbox JavaScript here in the <head> of the page    -->
+    <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v1.1.0/mapbox-gl.js'></script>
+    <!--    The Mapbox CSS here in the <head> of the page    -->
+    <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v1.1.0/mapbox-gl.css' rel='stylesheet' />
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/foundation/6.4.3/css/foundation.min.css" rel="stylesheet" />
+
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+        #map {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 100%;
+        }
+
+        /*  stlye for paragraph tags */
+        p {
+            color: white;
+        }
+
+        /* style for heading level 4 tags */
+        h5 {
+            color: white;
+            margin-left: 10px;
+        }
+
+        /* The CSS for the "jump" buttons  */
+        .jump {
+            display: inline-block;
+            /* displays over the map */
+            position: relative;
+            /* displays over the map */
+            margin: .8px auto;
+            width: 32.7%;
+            /* width of parent div */
+            padding: 8px;
+            border-style: solid;
+            border-color: oldlace;
+            border-radius: 3px;
+            font-family: monospace;
+            /* rounded corners */
+            font-size: 1em;
+            text-align: center;
+            font-weight: bold;
+            color: oldlace;
+            background: lightslategrey;
+            opacity: 85%;
+            cursor: pointer;
+        }
+
+        /*  style for items with the class "LegendContainer" */
+        .LegendContainer {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            z-index: 2;
+            width: 300px;
+            height: 35px;
+            background: rgba(80, 80, 80, .65);
+            border-radius: 7px;
+        }
+
+        /*  style for items with the class "descriptiLonPanel" */
+        .descriptionPanel {
+            position: absolute;
+            bottom: 65px;
+            left: 20px;
+            z-index: 2;
+            width: 300px;
+            height: 40px;
+            background: rgba(80, 80, 80, .65);
+            overflow: hidden;
+            border-radius: 7px;
+        }
+
+        .site-header {
+            height: 4rem;
+            position: relative;
+            z-index: 2;
+            background-color: #fff;
+            box-shadow: 0 4px 0 0 rgba(0, 0, 0, 0.1);
+            padding: 0 1rem;
+        }
+
+        .site-title {
+            font-size: 1.25rem;
+            line-height: 4rem;
+        }
+
+        /*.site-main contains everything except the header. On large screens, it fills the remaining height of the window.*/
+        .site-main {
+            position: relative;
+            z-index: 1;
+            /*large screens*/
+        }
+
+        .map-container {
+            height: 80vh;
+            /* large screens*/
+        }
+
+        .mapboxgl-popup {
+            max-width: 200px;
+        }
+
+        .mapboxgl-popup-content {
+            text-align: center;
+            font-family: inherit;
+
+        }
+
+        .addTo(map);
+
+        /* style for items with the class "legendItem" */
+        .legendItem {
+            margin: 0px;
+            padding-left: 20px;
+        }
+
+        /* style for items with the class "layerDescription" */
+        .layerDescription {
+            color: white;
+            padding-left: 8px;
+        }
+
+        .school {
+            color: #4B59FC;
+            padding-left: 10px;
+        }
+
+        #title {
+            z-index: 9999;
+            background-color: lightslategrey;
+            opacity: 85%;
+            text-align: center
+
+    </style>
+</head>
+
+<body>
+    <style>
+        .mapboxgl-popup {
+            max-width: 400px;
+            font-family: monospace;
+            font: 12px/20px sans-serif;
+        }
+
+    </style>
+    <div id='map'>
+
+    </div>
+    <div id='title'>
+        <h3 style="font-family:monospace;">OSAA First Place Award Distribution Since 2010</h3>
+        <h6 style="font-family:monospace;">By: Shauny Jackson</h6>
+    </div>
+
+    <button class='jump' id='OregonButton'>Click for Oregon View</button>
+    <button class='jump' id='ValleyButton'>Click for Willamette Valley View</button>
+    <button class='jump' id='PortlandButton'>Click for Portland View</button>
+
+    <!-- map description panel -->
+    <div class="descriptionPanel" id="descriptionPanel" style="height: 220px;">
+        <h5 style="margin-top: 6px" ;></h5>
+        <p style="margin-left: 6px; margin-right: 6px; font-family:monospace;">
+            This map shows all high schools in Oregon that have received a first place award for the Oregon School Activities Association (OSAA) for Dance and Drill since 2010. Years 2020 and 2021 have no records due to the covid pandemic. <br> - Click and drag to move the map or use the "Click for" buttons to jump locations<br> - Scroll to zoom in or zoom out
+        </p>
+    </div>
+    <div class="LegendContainer">
+        <div class="legendItem" style="padding-top: 5px">
+            <span class="school">&#11044;</span>
+            <span class="layerDescription" style="font-family:monospace;">Hover over points for more details</span>
+        </div>
+    </div>
+    <script>
+        mapboxgl.accessToken = 'pk.eyJ1Ijoic2hhdW55aiIsImEiOiJjbGc1Zmp0eDMwMnkxM3JtcG9wcDMwaHJkIn0.d8yqWyZWTryzJubfgb7jFA';
+        const map = new mapboxgl.Map({
+            container: 'map',
+            // Choose from Mapbox's core styles, or make your own style with Mapbox Studio
+            style: 'mapbox://styles/shaunyj/cli69x7uo00z001po2nfm8axv',
+            center: [-120.80851239331, 44.02184814708],
+            zoom: 6,
+        });
+
+        map.addControl(new mapboxgl.NavigationControl(), 'bottom-right');
+
+        map.on('load', () => {
+            map.addSource('places', {
+                'type': 'geojson',
+                'data': {
+                    'type': 'FeatureCollection',
+                    'features': [{
+                            "type": "Feature",
+                            "properties": {
+                                "Years": "2015",
+                                "School": "Astoria",
+                                "Wins": 1
+                            },
+                            "geometry": {
+                                "type": "Point",
+                                "coordinates": [
+                                    -123.84833,
+                                    46.17596
+                                ]
+                            }
+                        },
+                        {
+                            "type": "Feature",
+                            "properties": {
+                                "Years": "2015, 2016, 2017, 2018, 2019, 2022, 2023",
+                                "School": "Canby",
+                                "Wins": 8
+                            },
+                            "geometry": {
+                                "type": "Point",
+                                "coordinates": [
+                                    -122.69878,
+                                    45.25751
+                                ]
+                            }
+                        },
+                        {
+                            "type": "Feature",
+                            "properties": {
+                                "Years": "2010",
+                                "School": "Centennial",
+                                "Wins": 1
+                            },
+                            "geometry": {
+                                "type": "Point",
+                                "coordinates": [
+                                    -122.47725,
+                                    45.49616
+                                ]
+                            }
+                        },
+                        {
+                            "type": "Feature",
+                            "properties": {
+                                "Years": '2012, 2013',
+                                "School": "Clackamas",
+                                "Wins": 2
+                            },
+                            "geometry": {
+                                "type": "Point",
+                                "coordinates": [
+                                    -122.53409,
+                                    45.41776
+                                ]
+                            }
+                        },
+                        {
+                            "type": "Feature",
+                            "properties": {
+                                "Years": "2010, 2012, 2013",
+                                "School": "Crook County",
+                                "Wins": 3
+                            },
+                            "geometry": {
+                                "type": "Point",
+                                "coordinates": [
+                                    -120.83323,
+                                    44.29282
+                                ]
+                            }
+                        },
+                        {
+                            "type": "Feature",
+                            "properties": {
+                                "Years": "2012",
+                                "School": "Dallas",
+                                "Wins": 1
+                            },
+                            "geometry": {
+                                "type": "Point",
+                                "coordinates": [
+                                    -123.30371,
+                                    44.91641
+                                ]
+                            }
+                        },
+                        {
+                            "type": "Feature",
+                            "properties": {
+                                "Years": "2014, 2015, 2016",
+                                "School": "Gresham",
+                                "Wins": 3
+                            },
+                            "geometry": {
+                                "type": "Point",
+                                "coordinates": [
+                                    -122.4299,
+                                    45.50563
+                                ]
+                            }
+                        },
+                        {
+                            "type": "Feature",
+                            "properties": {
+                                "Years": "2011, 2012, 2013, 2014, 2015, 2022 and 2 in 2023",
+                                "School": "Lake Oswego",
+                                "Wins": 8
+                            },
+                            "geometry": {
+                                "type": "Point",
+                                "coordinates": [
+                                    -122.7026,
+                                    45.4267
+                                ]
+                            }
+                        },
+                        {
+                            "type": "Feature",
+                            "properties": {
+                                "Years": "2023",
+                                "School": "Lebanon",
+                                "Wins": 1
+                            },
+                            "geometry": {
+                                "type": "Point",
+                                "coordinates": [
+                                    -122.91404,
+                                    44.52971
+                                ]
+                            }
+                        },
+                        {
+                            "type": "Feature",
+                            "properties": {
+                                "Years": "2010",
+                                "School": "Lincoln",
+                                "Wins": 1
+                            },
+                            "geometry": {
+                                "type": "Point",
+                                "coordinates": [
+                                    -122.69059,
+                                    45.51978
+                                ]
+                            }
+                        },
+                        {
+                            "type": "Feature",
+                            "properties": {
+                                "Years": "2013",
+                                "School": "Marshfield",
+                                "Wins": 1
+                            },
+                            "geometry": {
+                                "type": "Point",
+                                "coordinates": [
+                                    -124.22125,
+                                    43.36042
+                                ]
+                            }
+                        },
+                        {
+                            "type": "Feature",
+                            "properties": {
+                                "Years": "2011, 2012, 2016",
+                                "School": "Milwuakie",
+                                "Wins": 3
+                            },
+                            "geometry": {
+                                "type": "Point",
+                                "coordinates": [
+                                    -122.63749,
+                                    45.44097
+                                ]
+                            }
+                        },
+                        {
+                            "type": "Feature",
+                            "properties": {
+                                "Years": "2010, 2011, 2014",
+                                "School": "Parkrose",
+                                "Wins": 3
+                            },
+                            "geometry": {
+                                "type": "Point",
+                                "coordinates": [
+                                    -122.54068,
+                                    45.55297
+                                ]
+                            }
+                        },
+                        {
+                            "type": "Feature",
+                            "properties": {
+                                "Years": "2010, 2011, 2012, 2013, 2018, 2019",
+                                "School": "Pendleton",
+                                "Wins": 6
+                            },
+                            "geometry": {
+                                "type": "Point",
+                                "coordinates": [
+                                    -118.8053,
+                                    45.67498
+                                ]
+                            }
+                        },
+                        {
+                            "type": "Feature",
+                            "properties": {
+                                "Years": "2013",
+                                "School": "Putnam",
+                                "Wins": 1
+                            },
+                            "geometry": {
+                                "type": "Point",
+                                "coordinates": [
+                                    -122.61027,
+                                    45.40018
+                                ]
+                            }
+                        },
+                        {
+                            "type": "Feature",
+                            "properties": {
+                                "Years": "2017 and 2 in 2023",
+                                "School": "Sheldon",
+                                "Wins": 3
+                            },
+                            "geometry": {
+                                "type": "Point",
+                                "coordinates": [
+                                    -123.0719,
+                                    44.08204
+                                ]
+                            }
+                        },
+                        {
+                            "type": "Feature",
+                            "properties": {
+                                "Years": "2023",
+                                "School": "Sherwood",
+                                "Wins": 1
+                            },
+                            "geometry": {
+                                "type": "Point",
+                                "coordinates": [
+                                    -122.87069,
+                                    45.35686
+                                ]
+                            }
+                        },
+                        {
+                            "type": "Feature",
+                            "properties": {
+                                "Years": "2014, 2023",
+                                "School": "Silverton",
+                                "Wins": 2
+                            },
+                            "geometry": {
+                                "type": "Point",
+                                "coordinates": [
+                                    -122.79566,
+                                    45.01437
+                                ]
+                            }
+                        },
+                        {
+                            "type": "Feature",
+                            "properties": {
+                                "Years": "2014, 2015, 2017",
+                                "School": "South Albany",
+                                "Wins": 3
+                            },
+                            "geometry": {
+                                "type": "Point",
+                                "coordinates": [
+                                    -123.07903,
+                                    44.60725
+                                ]
+                            }
+                        },
+                        {
+                            "type": "Feature",
+                            "properties": {
+                                "Years": "2015",
+                                "School": "Southridge",
+                                "Wins": 1
+                            },
+                            "geometry": {
+                                "type": "Point",
+                                "coordinates": [
+                                    -122.80697,
+                                    45.44997
+                                ]
+                            }
+                        },
+                        {
+                            "type": "Feature",
+                            "properties": {
+                                "Years": "2010, 2011, 2012, 2013, 2014, 2017, 2019",
+                                "School": "Stayton",
+                                "Wins": 7
+                            },
+                            "geometry": {
+                                "type": "Point",
+                                "coordinates": [
+                                    -122.8009,
+                                    44.80294
+                                ]
+                            }
+                        },
+                        {
+                            "type": "Feature",
+                            "properties": {
+                                "Years": "2014",
+                                "School": "Sunset",
+                                "Wins": 1
+                            },
+                            "geometry": {
+                                "type": "Point",
+                                "coordinates": [
+                                    -122.81989,
+                                    45.52787
+                                ]
+                            }
+                        },
+                        {
+                            "type": "Feature",
+                            "properties": {
+                                "Years": "2015",
+                                "School": "The Dalles",
+                                "Wins": 1
+                            },
+                            "geometry": {
+                                "type": "Point",
+                                "coordinates": [
+                                    -121.18738,
+                                    45.59623
+                                ]
+                            }
+                        },
+                        {
+                            "type": "Feature",
+                            "properties": {
+                                "Years": "2018, 2019",
+                                "School": "Tigard",
+                                "Wins": 2
+                            },
+                            "geometry": {
+                                "type": "Point",
+                                "coordinates": [
+                                    -122.7684,
+                                    45.40259
+                                ]
+                            }
+                        },
+                        {
+                            "type": "Feature",
+                            "properties": {
+                                "Years": "2010, 2011, 2012, 2013, 2015, 2016, 2018, 2022 and 2 in 2023",
+                                "School": "Valley Catholic",
+                                "Wins": 10
+                            },
+                            "geometry": {
+                                "type": "Point",
+                                "coordinates": [
+                                    -122.82985,
+                                    45.48843
+                                ]
+                            }
+                        },
+                        {
+                            "type": "Feature",
+                            "properties": {
+                                "Years": "2022",
+                                "School": "West Albany",
+                                "Wins": 1
+                            },
+                            "geometry": {
+                                "type": "Point",
+                                "coordinates": [
+                                    -123.11622,
+                                    44.62276
+                                ]
+                            }
+                        }
+                    ]
+                }
+            });
+            // Add a layer showing the places.
+            map.addLayer({
+                'id': 'places',
+                'type': 'circle',
+                'source': 'places',
+                'paint': {
+                    'circle-color': '#4B59FC',
+                    'circle-radius': 4,
+                    'circle-stroke-width': 1,
+                    'circle-stroke-color': '#010E47'
+                }
+            });
+
+            // Create a popup, but don't add it to the map yet.
+            const popup = new mapboxgl.Popup({
+                closeButton: false,
+                closeOnClick: false
+            });
+
+            map.on('mouseenter', 'places', (e) => {
+                // Change the cursor style as a UI indicator.
+                map.getCanvas().style.cursor = 'pointer';
+
+                // Copy coordinates array.
+                const coordinates = e.features[0].geometry.coordinates.slice();
+                const school = e.features[0].properties.School;
+                const description = e.features[0].properties.Wins;
+                const years = e.features[0].properties.Years;
+
+                // Ensure that if the map is zoomed out such that multiple
+                // copies of the feature are visible, the popup appears
+                // over the copy being pointed to.
+                while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+                    coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+                }
+
+                // Populate the popup and set its coordinates
+                // based on the feature found.
+                popup.setLngLat(coordinates).setHTML(school + ' High School <br> has received ' + description + ' first place <br> award(s) since 2010:<br> 1 awarded in ' + years).addTo(map);
+            });
+
+            map.on('mouseleave', 'places', () => {
+                map.getCanvas().style.cursor = '';
+                popup.remove();
+            });
+        });
+
+        /*** LISTENERS ***/
+
+        // Add a 'Listener' to the button element with the ID 'YellowstoneButton'.
+        document.getElementById('OregonButton').addEventListener('click', function() {
+            map.jumpTo({
+                center: [-120.808512, 44.501048],
+                zoom: 6.45
+            });
+        });
+
+        // Add a 'Listener' to the button element with the ID 'PortlandButton'.
+        document.getElementById('ValleyButton').addEventListener('click', function() {
+            map.jumpTo({
+                center: [-122.767523, 44.890098],
+                zoom: 7.8
+            });
+        });
+
+
+        // Add a 'Listener' to the button element with the ID 'LondonButton'.
+        document.getElementById('PortlandButton').addEventListener('click', function() {
+            map.jumpTo({
+                center: [-122.6788, 45.5212],
+                zoom: 9
+            });
+        });
+
+    </script>
+
+</body>
+
+</html>
